@@ -1,3 +1,5 @@
+import sys
+from logging.config import dictConfig
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -5,11 +7,17 @@ from flask import jsonify
 server = Flask(__name__)
 
 class commRestDialog:
-    def __init__(self, reqId, reqType, reqBody, resBody=None):
-        self.rainDropId   = reqId
+    def __init__(self, dropId, reqType, reqBody, resType=None, resBody=None):
+        self.rainDropId   = dropId
         self.requestType  = reqType
         self.requestBody  = reqBody
+
+        self.responseType = resType
         self.responseBody = resBody
+
+    def setResponse(self, response):
+        self.responseType = response[0]
+        self.responseBody = response[1]
 
     @property
     def serialize(self):
@@ -17,28 +25,26 @@ class commRestDialog:
             'rainDropId': self.rainDropId,
             'requestType': self.requestType,
             'requestBody': self.requestBody,
+            'responseType': self.responseType,
             'responseBody': self.responseBody
         }
 
+    @property
+    def toString(self):
+        return str(self.serialize)
 
 
-@server.route('/', methods=['GET'])
-def hello():
-    return "NO-OP"
-
-@server.route('/raindrop/heartbeat', methods=['GET','POST'])
-def rainDropHeartbeat():
-    rainDropID  = request.args.get('rainDropId', '')
-    requestType = request.args.get('requestType', '')
-    requestBody = request.args.get('requestBody', '')
-
-    commDialog = commRestDialog(rainDropID, requestType, requestBody)
-
+@server.route('/raindrop/sequence', methods=['GET','POST'])
+def rainDropOmnibus():
+    commDialog = commRestDialog(request.json["rainDropId"], request.json["requestType"], request.json["requestBody"])
+    
+    responseType = "REGISTRATION_RESPONSE"
+    responseBody = "Rain drop registered successfully."
+    commDialog.setResponse([responseType, responseBody])
+    
+    print(commDialog.toString, file=sys.stderr)
     return jsonify(dialog=commDialog.serialize)
 
-@server.route('/raindrop/sequence/<sequence>')
-def rainDropOmnibus(sequence):
-    return "Hello {}!".format(sequence)
 
 if __name__ == '__main__':
-    server.run(host='0.0.0.0', port=1068)
+    server.run(host='0.0.0.0', port=1068, debug=True)
