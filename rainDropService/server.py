@@ -33,9 +33,17 @@ class commRestDialog:
     def toString(self):
         return str(self.serialize)
 
+#class clientHandler:
+#    def __init__(self):
+#        continue
 
-@server.route('/raindrop/sequence', methods=['GET','POST'])
-def rainDropOmnibus():
+@server.route('/raindrop/params/global', methods=['POST'])
+def getGlobalParams(self):
+    return ""
+
+
+@server.route('/raindrop/sequence', methods=['POST'])
+def rainDropBus():
     commDialog = commRestDialog(request.json["rainDropId"], request.json["requestType"], request.json["requestBody"])
     
     responseType = "REGISTRATION_RESPONSE"
@@ -46,5 +54,8 @@ def rainDropOmnibus():
     return jsonify(dialog=commDialog.serialize)
 
 
+
+
 if __name__ == '__main__':
+    #Args: port, isDebug
     server.run(host='0.0.0.0', port=1068, debug=True)
