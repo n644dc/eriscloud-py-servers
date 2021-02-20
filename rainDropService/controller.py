@@ -27,10 +27,10 @@ class RainDropController:
             {"text": "responseBody"}
         ]
         createStatus, createMessage = self.sqlite.createTable(tableName, columns)
-        print("TableCreationResult: " + createMessage)
+        print("\nTableCreationResult: " + createMessage)
 
-        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, ["\"123123-332123-32323-232\"", "\"rd01\"", "\"REGISTER\"", "\"request body here\"", "\"REG_SUCCESS\"", "\"Registration was successful\""])
-        print("InsertRecordResult: " + insertMessage)
+        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, ["\"123123-332123-32323-232\"", "\"rd01\"", "\"REGISTER\"", "\"request body here\"", "\"REG_SUCCESS\"", "\"Registration was successful\""], "dialogId")
+        print("\nInsertRecordResult: " + insertMessage)
 
         resultsArray, selectMessage = self.sqlite.selectFromTable(tableName)
         print(str(resultsArray))
