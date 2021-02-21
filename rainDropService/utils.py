@@ -5,7 +5,7 @@ import os
 class commRestDialog:
     def __init__(self, dialogId, dropId, reqType, reqBody, resType=None, resBody=None):
         self.dialogId     = dialogId
-        self.rainDropId   = dropId
+        self.dropId       = dropId
         self.requestType  = reqType
         self.requestBody  = reqBody
 
@@ -20,7 +20,7 @@ class commRestDialog:
     def serialize(self):
         return {
             'dialogId':     self.dialogId,
-            'rainDropId':   self.rainDropId,
+            'rainDropId':   self.dropId,
             'requestType':  self.requestType,
             'requestBody':  self.requestBody,
             'responseType': self.responseType,

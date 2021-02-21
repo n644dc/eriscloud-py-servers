@@ -23,6 +23,8 @@ def rainDropBus():
     responseType = "REGISTRATION_RESPONSE"
     responseBody = "Rain drop registered successfully."
     commDialog.setResponse([responseType, responseBody])
+
+    control.saveCommDialog(commDialog)
     
     print(commDialog.toString, file=sys.stderr)
     return jsonify(dialog=commDialog.serialize)

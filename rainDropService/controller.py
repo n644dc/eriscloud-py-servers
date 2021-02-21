@@ -14,7 +14,13 @@ class RainDropController:
     def createCommDialog(self, dialogId, dropId, requestType, requestBody):
         commDialog = utils.commRestDialog(dialogId, dropId, requestType, requestBody)
         print(commDialog.toString())
+        
         return commDialog
+
+    def saveCommDialog(self, commDialog):
+
+        insertStatus, insertMessage = self.sqlite.insertToTable("restDialogs", ['"'+commDialog.dialogId+'"', '"'+commDialog.dropId+'"', '"'+commDialog.requestType+'"', '"'+commDialog.requestBody+'"', '"'+commDialog.responseType+'"', '"'+commDialog.responseBody+'"'], "dialogId")
+        print("\nInsertRecordResult: {} {}".format(insertMessage, str(insertStatus)))
 
     def createRainDropDb(self):
         tableName = "restDialogs"
@@ -28,9 +34,6 @@ class RainDropController:
         ]
         createStatus, createMessage = self.sqlite.createTable(tableName, columns)
         print("\nTableCreationResult: " + createMessage)
-
-        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, ["\"123123-332123-32323-232\"", "\"rd01\"", "\"REGISTER\"", "\"request body here\"", "\"REG_SUCCESS\"", "\"Registration was successful\""], "dialogId")
-        print("\nInsertRecordResult: " + insertMessage)
 
         resultsArray, selectMessage = self.sqlite.selectFromTable(tableName)
         print(str(resultsArray))
