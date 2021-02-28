@@ -90,7 +90,6 @@ class SqliteService:
         except Exception as e:
             status = "ERROR selectFromTable: " + str(e)
             print(status)
-            return resultArray, status
 
         return resultArray, status
     
@@ -100,6 +99,7 @@ class SqliteService:
         resultArray, status = self.selectFromTable(tableName, None, whereClause)
         if len(resultArray) > 1 and status is "OK":
             return True
+        return False
 
     # ###############################################
     def tableExists(self, tableName):
