@@ -56,7 +56,6 @@ class SqliteService:
         try:
             valuesString = ", ".join(values)
             query = "INSERT INTO {} VALUES ({})".format(tableName, valuesString)
-            print("~*~*~*~*~ " + query)
             self.curs.execute(query)
             self.commit()
         except Exception as e:

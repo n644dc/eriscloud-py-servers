@@ -31,6 +31,7 @@ class CommRestDialog:
     def toString(self):
         return str(self.serialize)
 
+
 class GlobalParams:
     
     REQUEST_TYPES = []
@@ -39,4 +40,3 @@ class GlobalParams:
     def __init__(self):
         pass
 
-    
