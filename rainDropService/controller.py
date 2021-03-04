@@ -13,8 +13,6 @@ class RainDropController:
 
     def createCommDialog(self, dialogId, dropId, requestType, requestBody):
         commDialog = utils.CommRestDialog(dialogId, dropId, requestType, requestBody)
-        print(commDialog.toString())
-        
         return commDialog
 
     def saveCommDialog(self, commDialog):
