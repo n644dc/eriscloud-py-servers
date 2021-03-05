@@ -3,6 +3,7 @@ import os
 
 
 class CommRestDialog:
+    
     def __init__(self, dialogId, dropId, reqType, reqBody, resType=None, resBody=None):
         self.dialogId     = dialogId
         self.dropId       = dropId
@@ -30,13 +31,3 @@ class CommRestDialog:
     @property
     def toString(self):
         return str(self.serialize)
-
-
-class GlobalParams:
-    
-    REQUEST_TYPES = []
-    RESPONSE_TYPES = []
-
-    def __init__(self):
-        pass
-

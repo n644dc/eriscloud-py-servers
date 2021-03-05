@@ -16,16 +16,18 @@ class RainController:
     def addVehicleData(self, dropId, requestBody):
         vdString = self.decodeBase64(requestBody)
         vehicleDataObj = self.stringToJsonObj(vdString)
-        print(vehicleDataObj["px4_autopilot_version"])
+        print(vehicleDataObj["test"])
 
     def createCommDialog(self, dialogId, dropId, requestType, requestBody):
         commDialog = utils.CommRestDialog(dialogId, dropId, requestType, requestBody)
+        print("commObj: " + commDialog.dialogId)
         return commDialog
 
     def saveCommDialog(self, commDialog):
         dialogParams = ['"'+commDialog.dialogId+'"', '"'+commDialog.dropId+'"', '"'+commDialog.requestType+'"', '"'+commDialog.requestBody+'"', '"'+commDialog.responseType+'"', '"'+commDialog.responseBody+'"']
-        insertStatus, insertMessage = self.sqlite.insertToTable("restDialogs", dialogParams, "dialogId")
-        print("\nInsertRecordResult: {} {}".format(insertMessage, str(insertStatus)))
+        tableName = "restDialogs"
+        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, dialogParams, "dialogId")
+        print("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
 
     def decodeBase64(self, base64text):
         base64_bytes = base64text.encode('ascii')
@@ -49,7 +51,7 @@ class RainController:
             {"text": "responseBody"}
         ]
         createStatus, createMessage = self.sqlite.createTable(tableName, columns)
-        print("\nTableCreationResult: " + createMessage)
+        print("TableCreationResult: " + createMessage)
 
         ###### Table vehicleData
         tableName = "vehicleData"
@@ -78,7 +80,7 @@ class RainController:
             {"text": "armed"}
         ]
         createStatus, createMessage = self.sqlite.createTable(tableName, columns)
-        print("\nTableCreationResult: " + createMessage)
+        print("TableCreationResult: " + createMessage)
 
         ###### Table registeredVehicles
         tableName = "registeredVehicles"
@@ -88,5 +90,5 @@ class RainController:
             {"text": "type"}
         ]
         createStatus, createMessage = self.sqlite.createTable(tableName, columns)
-        print("\nTableCreationResult: " + createMessage)
+        print("TableCreationResult: " + createMessage)
 # End Class RainController

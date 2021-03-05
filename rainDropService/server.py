@@ -30,6 +30,10 @@ def rainDropBus():
     restDialogId = str(uuid.uuid4())
 
     commDialog = control.createCommDialog(restDialogId, request.json["rainDropId"], request.json["requestType"], request.json["requestBody"])
+
+    responseType = "ACK"
+    responseBody = "Received"
+    commDialog.setResponse([responseType, responseBody])
     control.saveCommDialog(commDialog)
 
 
@@ -39,9 +43,7 @@ def rainDropBus():
         control.addVehicleData(commDialog.dropId, commDialog.requestBody)
 
 
-    responseType = "ACK"
-    responseBody = "Received"
-    commDialog.setResponse([responseType, responseBody])
+
 
     control.sqlite.closeConnection()
     return jsonify(dialog=commDialog.serialize)

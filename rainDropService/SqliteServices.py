@@ -17,16 +17,16 @@ class SqliteService:
     # ###############################################
     def createVerifyDbFile(self): 
         if not os.path.isfile(self.DB_FULL_PATH):
-            print("~*~*~*~*~ Warning: DB does not exist, creating new.")
+            print("Warning: DB does not exist, creating new.")
             with open(self.DB_FULL_PATH, "w"):
                 pass
         else:
-            print("~*~*~*~*~ Existing DB file found. Using that.")
+            print("Existing DB file found. Using that.")
             
     # ###############################################
     def createTable(self, tableName, columns):
         if self.tableExists(tableName):
-            return False, "table already exists"
+            return False, "table: {} already exists".format(tableName)
 
         columnString = ""
         for col in columns:
@@ -36,7 +36,6 @@ class SqliteService:
         query = "CREATE TABLE {} ({})".format(tableName, columnString)
 
         try:
-            print("~*~*~*~*~ " + query)
             self.curs.execute(query)
             self.commit()
         except Exception as e:
@@ -83,7 +82,6 @@ class SqliteService:
             query = "SELECT {} FROM {}".format(selectFields, tableName)
 
         try:
-            print("~*~*~*~*~ " + query)
             self.curs.execute(query)
             resultArray = self.curs.fetchall()
         except Exception as e:
