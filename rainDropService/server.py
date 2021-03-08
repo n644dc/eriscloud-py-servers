@@ -24,6 +24,8 @@ def getTableData():
 ####################################
 @server.route('/raindrop/sequence', methods=['POST'])
 def rainDropBus():
+    responseType = "ACK"
+    responseBody = "NONE"
     control = controller.RainController()
     control.createRainDropDb()
 
@@ -31,20 +33,18 @@ def rainDropBus():
 
     commDialog = control.createCommDialog(restDialogId, request.json["rainDropId"], request.json["requestType"], request.json["requestBody"])
 
-    responseType = "ACK"
-    responseBody = "Received"
-    commDialog.setResponse([responseType, responseBody])
-    control.saveCommDialog(commDialog)
 
-
-    if commDialog.requestType == "REGISTER":
-        pass
-    if commDialog.requestType == "VEHICLE_DATA":
+    if commDialog.requestType == "register":
+        regSuccess = control.registerVehicle(commDialog.dropId, commDialog.dialogId, "rainDrop")
+        if regSuccess:
+            responseBody = "Successful Registration"
+        else:
+            responseBody = "ERROR: Already registered"
+    if commDialog.requestType == "sendVehicleData":
         control.addVehicleData(commDialog.dropId, commDialog.requestBody)
 
-
-
-
+    commDialog.setResponse([responseType, responseBody])
+    control.saveCommDialog(commDialog)
     control.sqlite.closeConnection()
     return jsonify(dialog=commDialog.serialize)
 

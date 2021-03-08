@@ -13,21 +13,31 @@ class RainController:
         self.sqlite = SqliteServices.SqliteService("/ops/data/rainDropLedger.db")
         print("Controller Initialized")
 
+
     def addVehicleData(self, dropId, requestBody):
         vdString = self.decodeBase64(requestBody)
         vehicleDataObj = self.stringToJsonObj(vdString)
         print(vehicleDataObj["test"])
 
+
+    def registerVehicle(self, dropId, registrationId, vType):
+        vehicleParams = ['"' + dropId + '"', '"' + registrationId + '"', '"' + vType + '"']
+        tableName = "registeredVehicles"
+        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, vehicleParams, 0, "dropId")
+        print("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
+        return insertStatus
+
+
     def createCommDialog(self, dialogId, dropId, requestType, requestBody):
         commDialog = utils.CommRestDialog(dialogId, dropId, requestType, requestBody)
-        print("commObj: " + commDialog.dialogId)
         return commDialog
 
     def saveCommDialog(self, commDialog):
         dialogParams = ['"'+commDialog.dialogId+'"', '"'+commDialog.dropId+'"', '"'+commDialog.requestType+'"', '"'+commDialog.requestBody+'"', '"'+commDialog.responseType+'"', '"'+commDialog.responseBody+'"']
         tableName = "restDialogs"
-        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, dialogParams, "dialogId")
+        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, dialogParams, 0, "dialogId")
         print("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
+
 
     def decodeBase64(self, base64text):
         base64_bytes = base64text.encode('ascii')
@@ -38,6 +48,7 @@ class RainController:
     def stringToJsonObj(self, jsonString):
         dataObj = json.loads(jsonString)
         return dataObj
+
 
     def createRainDropDb(self):
         ###### Table restDialogs

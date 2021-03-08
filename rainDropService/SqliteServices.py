@@ -26,7 +26,7 @@ class SqliteService:
     # ###############################################
     def createTable(self, tableName, columns):
         if self.tableExists(tableName):
-            return False, "table: {} already exists".format(tableName)
+            return False, ">> {} already exists".format(tableName)
 
         columnString = ""
         for col in columns:
@@ -45,10 +45,10 @@ class SqliteService:
         return True, "Table created successfully."
 
     # ###############################################
-    def insertToTable(self, tableName, values, keyColumnName=None):
+    def insertToTable(self, tableName, values, valuesIndex=None, keyColumnName=None):
 
-        if keyColumnName is not None:
-            recExists = self.recordExists(tableName, keyColumnName, values[0])
+        if keyColumnName is not None:            
+            recExists = self.recordExists(tableName, keyColumnName, values[valuesIndex])
             if recExists:
                 return False, "Record Already Exists."
 
@@ -94,7 +94,8 @@ class SqliteService:
     def recordExists(self, tableName, columnName, recordId):
         whereClause = columnName + " = " + recordId
         resultArray, status = self.selectFromTable(tableName, None, whereClause)
-        if len(resultArray) > 1 and status is "OK":
+        print(resultArray)
+        if len(resultArray) > 0 and status is "OK":
             return True
         return False
 
