@@ -3,6 +3,7 @@ import os
 import utils
 import base64
 import json
+import logging
 import SqliteServices
 
 
@@ -13,18 +14,33 @@ class RainController:
         self.sqlite = SqliteServices.SqliteService("/ops/data/rainDropLedger.db")
         print("Controller Initialized")
 
-
     def addVehicleData(self, dropId, requestBody):
         vdString = self.decodeBase64(requestBody)
         vehicleDataObj = self.stringToJsonObj(vdString)
-        print(vehicleDataObj["test"])
+        tableName = "vehicleData"
+        #print(vehicleDataObj)
 
+        vData =  ['"'+vehicleDataObj[0]['dropId']+'"', '"'+vehicleDataObj[1]['px4_autopilot_version']+'"', '"'+vehicleDataObj[2]['autopilot_ftp']+'"' ]
+        vData += ['"'+vehicleDataObj[3]['globalLoc']+'"', '"'+vehicleDataObj[4]['globalLoc_relAlt']+'"', '"'+vehicleDataObj[5]['localLoc']+'"' ]
+        vData += ['"'+vehicleDataObj[6]['attitude']+'"', '"'+vehicleDataObj[7]['velocity']+'"', '"'+vehicleDataObj[8]['gps']+'"', '"'+vehicleDataObj[9]['groundspeed']+'"' ]
+        vData += ['"'+vehicleDataObj[10]['airspeed']+'"', '"'+vehicleDataObj[11]['gimbalStatus']+'"', '"'+vehicleDataObj[12]['battery']+'"' ]
+        vData += ['"'+vehicleDataObj[13]['ekf_ok']+'"', '"'+vehicleDataObj[14]['last_heartbeat']+'"', '"'+vehicleDataObj[15]['rangefinder']+'"' ]
+        vData += ['"'+vehicleDataObj[16]['rangefinder_distance']+'"', '"'+vehicleDataObj[17]['rangefinder_voltage']+'"', '"'+vehicleDataObj[18]['heading']+'"' ]
+        vData += ['"'+vehicleDataObj[19]['isArmable']+'"', '"'+vehicleDataObj[20]['systemStatus']+'"', '"'+vehicleDataObj[21]['mode']+'"', '"'+vehicleDataObj[22]['armed']+'"' ]
+
+        print(vData)
+
+        insertStatus, insertMessage = self.sqlite.insertToTable(tableName, vData, 0, "dialogId")
+        print("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
+        logging.info("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
+        return insertStatus
 
     def registerVehicle(self, dropId, registrationId, vType):
         vehicleParams = ['"' + dropId + '"', '"' + registrationId + '"', '"' + vType + '"']
         tableName = "registeredVehicles"
         insertStatus, insertMessage = self.sqlite.insertToTable(tableName, vehicleParams, 0, "dropId")
         print("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
+        logging.info("InsertRecordResult: {} {} {}".format(insertMessage, str(insertStatus), tableName))
         return insertStatus
 
 
@@ -75,6 +91,7 @@ class RainController:
             {"text": "localLoc"},
             {"text": "attitude"},
             {"text": "velocity"},
+            {"text": "gps"},
             {"text": "groundspeed"},
             {"text": "airspeed"},
             {"text": "gimbalStatus"},
