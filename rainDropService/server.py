@@ -6,11 +6,12 @@ from logging.config import dictConfig
 from flask import Flask
 from flask import request
 from flask import jsonify
-
+from flask_cors import CORS, cross_origin
 server = Flask(__name__)
 
 ####################################
 @server.route('/portal/getTableData', methods=['GET', 'POST'])
+@cross_origin()
 def getTableData():
     control = controller.RainController()
     control.createRainDropDb()
