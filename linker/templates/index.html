@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>ERIS CLOUD ONE</title>
+      <style>
+         #mainBox {
+            margin: 10px auto;
+            width: 300px;
+            padding:5px;
+         }
+         #mainBox h1 {
+            margin:10px;
+         }
+         #resultBox {
+            border: 1px solid #003366;
+            margin: 5px;
+            padding: 5px;
+            width: 100%;
+            display: none;
+         }
+      </style>
+      <!-- CSS only -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+   </head>
+    <body>
+
+        <div id="mainBox">
+            <h1>linker</h1>
+            <div>
+               <input type="text" class="form-control" id="linkInput" placeholder="Enter link.">
+               <button type="button" id="getLink" class="btn btn-outline-primary">Get Linked Link</button>
+            </div>
+            <div id="resultBox">
+            
+            </div>
+        </div>
+
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg==" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+            $("#getLink").click(function() {
+               var link = encodeURI($("#linkInput").val());
+               $.get( "http://eriscloud.one:88/seturl?link="+link, function( newLink ) {
+                  $("#resultBox").html(newLink);
+                  $("#resultBox").fadeIn();
+               });  
+            });
+        </script>
+   </body>
+</html>
